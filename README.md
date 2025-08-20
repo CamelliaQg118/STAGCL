@@ -5,7 +5,7 @@ __STAGCL__
 
 ## Requirements:
  
-STAGCL is implemented in the pytorch framework. Please run STMACL on CUDA. The following packages are required to be able to run everything in this repository (included are the versions we used):
+STAGCL is implemented in the pytorch framework. Please run STAGCL on CUDA. The following packages are required to be able to run everything in this repository (included are the versions we used):
 
 ```bash
 python==3.11.0
