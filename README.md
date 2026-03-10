@@ -2,6 +2,7 @@
 An official source code for the paper "Identifying Spatial Domains from Spatial Transcriptomics Using Graph Contrastive Learning with an Adversarial Mechanism," accepted by 2025 IEEE International Conference on Bioinformatics and Biomedicine (BIBM) (https://ieeexplore.ieee.org/abstract/document/11356562). Any communications or issues are welcome. Please contact qigao118@163.com. If you find this repository useful to your research or work, it is really appreciated to cite our paper.
 ## Overview:
 ![Gao1](https://github.com/user-attachments/assets/71487ed4-8468-47f1-8d5a-cfa1ed8b3d4d)
+STAGCL, a contrastive learning framework with an adversarial mechanism that jointly optimizes three paradigms of graph SSL to detect spatial domain. STAGCL consists of three main components: data augmentation, representation learning, and downstream analysis. STAGCL has been applied to five spatial transcriptomics datasets across platforms like 10X Visium, osmFISH, Stereo-seq.
 ## Requirements:
  
 STAGCL is implemented in the pytorch framework. Please run STAGCL on CUDA. The following packages are required to be able to run everything in this repository (included are the versions we used):
