@@ -102,19 +102,6 @@ class stagcl:
             for epoch in tqdm(range(self.epochs)):
                 self.model.train()
                 self.optimizer.zero_grad()
-                # if epoch % self.dec_interval == 0:
-                #     _, _, _, tmp_q, _, _, _, _ = self.model_eval()
-                #
-                #     tmp_p = target_distribution(torch.Tensor(tmp_q))
-                #     y_pred = tmp_p.cpu().numpy().argmax(1)
-                #
-                #     delta_label = np.sum(y_pred != y_pred_last).astype(np.float32) / y_pred.shape[0]
-                #     y_pred_last = np.copy(y_pred)
-                #     self.model.train()
-                #     if epoch > 0 and delta_label < self.dec_tol:
-                #         print('delta_label {:.4}'.format(delta_label), '< tol', self.dec_tol)
-                #         print('Reached tolerance threshold. Stopping training.')
-                #         break
                 emb, H1, H2, loss_rec, loss_sim, loss_cos, loss_adv = self.model(self.adata, self.X, self.adj, self.edge_index)
                 if epoch > 200:
                     pseudo_z1 = torch.softmax(H1, dim=-1)
@@ -124,7 +111,6 @@ class stagcl:
                     high_confidence = torch.min(dis, dim=1).values.cpu()
                     threshold = torch.sort(high_confidence).values[int(len(high_confidence) * self.threshold)]
                     high_confidence_idx = np.argwhere(high_confidence < threshold)[0]
-                    # print("high_confidence_idx",  high_confidence_idx)
                     h_i = high_confidence_idx.to(self.device)
                     y_sam = torch.tensor(predict_labels, device=self.device)[high_confidence_idx]
                     loss_1 = (F.cross_entropy(pseudo_z1[h_i], y_sam)).mean()
@@ -136,26 +122,12 @@ class stagcl:
 
                 torch.set_grad_enabled(True)
                 emb, H1, H2, loss_rec, loss_sim, loss_cos, loss_adv = self.model(self.adata, self.X, self.adj, self.edge_index)
-                # loss_kl = F.kl_div(q.log(), torch.tensor(tmp_p).to(self.device)).to(self.device)
                 loss_tatal = self.rec_w * loss_rec + self.adv_w * loss_adv + self.cos_w * loss_cos +\
                              self.sim_w * loss_sim + self.match_w * loss_match# + self.kl_w * loss_kl
                 #
                 loss_tatal.backward()
                 self.optimizer.step()
-
-
-                list_rec.append(loss_rec.detach().cpu().numpy())
-                list_adv.append(loss_adv.detach().cpu().numpy())
-                list_cos.append(loss_cos.detach().cpu().numpy())
-                list_sim.append(loss_sim.detach().cpu().numpy())
-                # list_kl.append(loss_kl.detach().cpu().numpy())
                 list_match.append(loss_match.detach().cpu().numpy())
-                print('loss_rec = {:.5f}'.format(loss_rec),
-                      'loss_adv= {:.5f}'.format(loss_adv),
-                      'loss_cos= {:.5f}'.format(loss_cos),
-                      'loss_sim= {:.5f}'.format(loss_sim),
-                      'loss_match = {:.5f}'.format(loss_match), #'loss_kl = {:.5f}'.format(loss_kl),
-                      'loss_total = {:.5f}'.format(loss_tatal))
 
                 emb, _, _, _, _, _, _ = self.model_eval()
                 kmeans = KMeans(n_clusters=self.n_clusters).fit(emb)
@@ -206,9 +178,9 @@ class stagcl:
                 torch.set_grad_enabled(True)
                 emb, H1, H2, loss_rec, loss_sim, loss_cos, loss_adv = self.model(self.adata, self.X, self.adj,
                                                                                     self.edge_index)
-                # loss_kl = F.kl_div(q.log(), torch.tensor(tmp_p).to(self.device)).to(self.device)
+  
                 loss_tatal = self.rec_w * loss_rec + self.adv_w * loss_adv + self.cos_w * loss_cos +\
-                             self.sim_w * loss_sim + self.match_w * loss_match  # + self.kl_w * loss_kl
+                             self.sim_w * loss_sim + self.match_w * loss_match 
                 # 
                 loss_tatal.backward()
                 self.optimizer.step()
