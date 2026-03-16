@@ -36,7 +36,7 @@ adata, adata_X = utils.load_data(dataset, file_fold)
 df_meta = pd.read_csv(file_fold + '/metadata.tsv', sep='\t')
 adata = utils.label_process_DLPFC(adata, df_meta)
 
-savepath = '../Result/xiaorong/loss_m/DLPFC/' + str(slice) + '/'
+savepath = '../Result/DLPFC/' + str(slice) + '/'
 
 if not os.path.exists(savepath):
     os.mkdir(savepath)
@@ -86,12 +86,6 @@ print(str(slice))
 print(n_clusters)
 ARI_list.append(ARI)
 
-
-# # plt.rcParams["figure.figsize"] = (3, 3)
-# # title = "Manual annotation (" + dataset + "#" + slice + ")"
-# # sc.pl.spatial(adata, img_key="hires", color=['ground_truth'], title=title, show=False)
-# # plt.savefig(savepath + 'Manual Annotation.jpg', bbox_inches='tight', dpi=300)
-# # plt.show()
 #
 fig, axes = plt.subplots(1, 2, figsize=(4 * 2, 4))
 sc.pl.spatial(adata, color='ground_truth', ax=axes[0], show=False)
@@ -103,29 +97,4 @@ axes[1].set_title('STAGCL_Clustering: (ARI=%.4f)' % ARI)
 plt.subplots_adjust(wspace=0.5)  
 plt.subplots_adjust(hspace=0.5)  
 plt.savefig(savepath + 'STAGCL.jpg', dpi=300)  
-
-
-# sc.pp.neighbors(adata, use_rep='STAGCL', metric='cosine')
-# sc.tl.umap(adata)
-# sc.pl.umap(adata, color='STAGCL', title='STAGCL', show=False)
-# plt.savefig(savepath + 'umap.jpg', bbox_inches='tight', dpi=300)
-#
-# for ax in axes:
-#     ax.set_aspect(1)
-# plt.subplots_adjust(wspace=0.5)
-# plt.subplots_adjust(hspace=0.5)
-#
-#
-# title = 'STAGCL:{}_{} ARI={:.4f} NMI={:.4f}'.format(str(dataset), str(slice), adata.uns['ARI'], adata.uns['NMI'])
-# sc.pl.spatial(adata, img_key="hires", color=['STAGCL'], title=title, show=False)
-# plt.savefig(savepath + 'STAGCL_NMI_ARI.tif', bbox_inches='tight', dpi=300)
-#
-# plt.rcParams["figure.figsize"] = (3, 3)
-# sc.tl.paga(adata, groups='STAGCL')
-# sc.pl.paga_compare(adata, legend_fontsize=10, frameon=False, size=20, title=title, legend_fontoutline=2, show=False)
-# plt.savefig(savepath + 'STAGCL_PAGA_domain.tif', bbox_inches='tight', dpi=300)
-#
-# sc.tl.paga(adata, groups='ground_truth')
-# sc.pl.paga_compare(adata, legend_fontsize=10, frameon=False, size=20, title=title, legend_fontoutline=2, show=False)
-# plt.savefig(savepath + 'STAGCL_PAGA_ground_truth.png', bbox_inches='tight', dpi=300)
 
