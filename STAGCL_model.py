@@ -98,7 +98,7 @@ class stagcl:
         idx_max = []
         emb_max = []
 
-        if self.dataset in ['Human_Breast_Cancer', 'DLPFC', 'Mouse_Brain_Anterior_Section1']:
+        if self.dataset in ['Human_Breast_Cancer', 'DLPFC']:
             for epoch in tqdm(range(self.epochs)):
                 self.model.train()
                 self.optimizer.zero_grad()
@@ -183,14 +183,6 @@ class stagcl:
             ax.plot(list_sim, label='sim')
             ax.legend()
             plt.show()
-
-            # acc, f1 = cluster_acc(labels, idx_max)
-            print("epoch_max", epoch_max)
-            print("ARI=======", ari_max)
-            nmi_res = metrics.normalized_mutual_info_score(labels, idx_max)
-            print("NMI=======", nmi_res)
-            self.adata.obs['STAGCL'] = idx_max.astype(str)
-            self.adata.obsm['emb'] = emb_max
             return self.adata.obsm['emb'], self.adata.obs['STAGCL']
 
 
@@ -231,11 +223,7 @@ class stagcl:
                 loss_tatal.backward()
                 self.optimizer.step()
                 emb, _, _, _, _, _, _ = self.model_eval()
-            # if self.mode == 'clustering':
-            #     return emb
-            # elif self.mode == 'imputation':
-            #     self.adata.obsm['rec'] = rec
-            #     return emb, self.adata.obsm['rec']
+
 
             return emb
 
