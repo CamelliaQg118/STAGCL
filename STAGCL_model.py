@@ -172,17 +172,7 @@ class stagcl:
                     epoch_max = epoch
                     idx_max = idx
                     emb_max = emb
-            import matplotlib.pyplot as plt
-            fig, ax = plt.subplots()
-            ax.plot(list_rec, label='rec')
-            ax.plot(list_adv, label='adv')
-            ax.plot(list_cos, label='cos')
-            ax.plot(list_kl, label='kl')
-            # print(type(list_match[0]))
-            ax.plot(list_match, label='match')
-            ax.plot(list_sim, label='sim')
-            ax.legend()
-            plt.show()
+
             return self.adata.obsm['emb'], self.adata.obs['STAGCL']
 
 
